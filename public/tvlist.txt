@@ -1,5 +1,4 @@
-IPTV Channels,#genre#
-CCTV1,http://121.51.249.103/tlivecloud-ipv6.ysp.cctv.cn/001/2000210103.m3u8
-CCTV1,https://cctvwbndks.v.kcdnvip.com/cctvwbnd/cctv1_2/index.m3u8
-CCTV13,https://cctvwbndks.v.kcdnvip.com/cctvwbnd/cctv13_2/index.m3u8
-CCTV13,https://live-play.cctvnews.cctv.com/cctv/merge_cctv13_mud.m3u8
+International IPTV Channels,#genre#
+BBC News,https://vs-cmaf-push-uk.live.mmn-hls.com/live/eds/bbc_news24/bbc_news24-uk-sbr.m3u8
+France 24,https://f24hls-i.akamaihd.net/hls/live/2017658/F24_EN_LO_HLS/master.m3u8
+CNN,https://cnn-cnnog-1.akamaized.net/hls/live/2014075/cnngo_source/v1/master.m3u8
