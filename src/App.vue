@@ -15,7 +15,7 @@ import { useI18n } from "./i18n/index.js";
 const { t, locale } = useI18n();
 
 const IPTV_URL = "https://iptv-org.github.io/iptv/index.m3u";
-const DEFAULT_LIST = "https://raw.githubusercontent.com/imDazui/Tvlist-awesome-m3u-m3u8/master/m3u/全国景区源.m3u8";
+const DEFAULT_LIST = "https://iptv-org.github.io/iptv/index.m3u";
 
 const routes = { "/": Home };
 const currentPath = ref(window.location.hash);

@@ -8,6 +8,7 @@ function detectLocale() {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored && messages[stored]) return stored;
 
+  // Default to English, but support French if browser language is French
   const browserLangs = navigator.languages || [navigator.language];
   for (const lang of browserLangs) {
     if (lang.startsWith("fr")) return "fr";
