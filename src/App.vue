@@ -56,13 +56,14 @@ const currentView = computed(() => {
 
 function switchMode(mode) {
   isIptv.value = mode === "iptv";
-  loadPlaylist(isIptv.value ? IPTV_URL : null);
+  loadPlaylist(isIptv.value ? IPTV_URL : DEFAULT_LIST);
 }
 
 async function loadPlaylist(playlistUrl) {
   if (!playlistUrl) {
     const params = new URLSearchParams(window.location.hash.replace("#/", ""));
-    playlistUrl = params.get("s") || localStorage.getItem("tvlistUrl") || DEFAULT_LIST;
+    // Use DEFAULT_LIST (French) for HOME mode, IPTV_URL for FREE IPTV
+    playlistUrl = params.get("s") || (isIptv.value ? IPTV_URL : (localStorage.getItem("tvlistUrl") || DEFAULT_LIST));
   }
 
   // Check cache first
