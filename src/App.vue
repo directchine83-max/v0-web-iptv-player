@@ -14,8 +14,8 @@ import { useI18n } from "./i18n/index.js";
 
 const { t, locale } = useI18n();
 
-const IPTV_URL = "https://iptv-org.github.io/iptv/index.m3u";
-const DEFAULT_LIST = "https://iptv-org.github.io/iptv/index.m3u";
+const IPTV_URL = "https://iptv-org.github.io/iptv/index.m3u"; // Global playlist for FREE IPTV
+const DEFAULT_LIST = "https://iptv-org.github.io/iptv/countries/fr.m3u"; // French playlist for HOME
 
 const routes = { "/": Home };
 const currentPath = ref(window.location.hash);

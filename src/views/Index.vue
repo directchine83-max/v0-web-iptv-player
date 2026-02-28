@@ -42,6 +42,14 @@ const languages = ref({
       player.language(newLocale === "fr" ? "fr" : "en");
     });
 
+    // Watch for source changes and update player
+    watch(() => props.value, (newValue) => {
+      if (newValue && player) {
+        player.src({ src: newValue, type: "application/x-mpegURL" });
+        player.play();
+      }
+    });
+
     watch(tracks, () => {
       refreshTranslateBtn(player, t("translateBtn"));
     });
