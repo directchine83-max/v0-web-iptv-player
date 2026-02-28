@@ -1,7 +1,7 @@
 export function parse(obj, name) {
   let suffixName = suffix(name)
   return convert[suffixName](obj).filter((o) =>
-    o.url && o.url.includes(location.protocol.split(":")[0])
+    o.url && (o.url.startsWith("http://") || o.url.startsWith("https://"))
   )
 }
 
