@@ -15,10 +15,6 @@ export const messages = {
     langSwitch: "FR",
     noResults: "No channels found",
     channelCount: "{count} channels",
-    categories: "Categories",
-    languages: "Languages",
-    backToCatalog: "Back",
-    allChannels: "All Channels",
   },
   fr: {
     appTitle: "Web TV",
@@ -36,9 +32,5 @@ export const messages = {
     langSwitch: "EN",
     noResults: "Aucune cha\u00EEne trouv\u00E9e",
     channelCount: "{count} cha\u00EEnes",
-    categories: "Cat\u00e9gories",
-    languages: "Langues",
-    backToCatalog: "Retour",
-    allChannels: "Toutes les cha\u00EEnes",
   },
 };
