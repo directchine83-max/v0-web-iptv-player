@@ -10,6 +10,9 @@ import { ref, computed, onMounted, watch } from "vue";
 import Home from "./views/Index.vue";
 import NotFound from "./views/NotFound.vue";
 import Nav from "./components/Nav.vue";
+import { useI18n } from "./i18n/index.js";
+
+const { t, locale } = useI18n();
 
 const IPTV_URL = "https://iptv-org.github.io/iptv/index.m3u";
 const DEFAULT_LIST = "https://raw.githubusercontent.com/imDazui/Tvlist-awesome-m3u-m3u8/master/m3u/全国景区源.m3u8";
@@ -86,7 +89,7 @@ async function loadPlaylist(playlistUrl) {
     selectFirstChannel();
   } catch (e) {
     console.error("Failed to load playlist:", e);
-    tvs.value = [{ name: "Failed to load playlist", isTv: false }];
+    tvs.value = [{ name: t("failedToLoad"), isTv: false }];
   } finally {
     loading.value = false;
   }

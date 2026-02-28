@@ -1,12 +1,22 @@
 <template>
   <div class="nav" :class="{ 'nav-open': isOpen }">
     <div class="nav-menu" @click="isOpen = true">
-      <img class="logo" src="../assets/logo.svg" />
+      <img class="logo" src="../assets/logo.svg" alt="Web TV" />
     </div>
     <div class="nav-list-warp" v-show="isOpen">
       <div class="nav-header">
-        <span class="nav-title">Web TV</span>
-        <button class="nav-close" @click="isOpen = false">&times;</button>
+        <span class="nav-title">{{ t('appTitle') }}</span>
+        <div class="nav-header-actions">
+          <button
+            class="lang-toggle"
+            @click="toggleLocale"
+            :title="t('langSwitch')"
+            :aria-label="'Switch to ' + t('langSwitch')"
+          >
+            {{ t('langSwitch') }}
+          </button>
+          <button class="nav-close" @click="isOpen = false" aria-label="Close menu">&times;</button>
+        </div>
       </div>
       <div class="nav-tabs">
         <a
@@ -14,49 +24,71 @@
           :class="{ 'nav-tab-active': !isIptv }"
           href="#/"
           @click="$emit('switchMode', 'home')"
-        >HOME</a>
+        >{{ t('tabHome') }}</a>
         <a
           class="nav-tab"
           :class="{ 'nav-tab-active': isIptv }"
           href="#/?iptv=1"
           @click="$emit('switchMode', 'iptv')"
-        >FREE IPTV</a>
+        >{{ t('tabIptv') }}</a>
       </div>
-      <div class="nav-search" v-if="filteredTvs.length > 20">
+      <div class="nav-search" v-if="props.tvs.length > 20 || search">
         <input
           v-model="search"
           type="text"
-          placeholder="Search channels..."
+          :placeholder="t('searchPlaceholder')"
           class="nav-search-input"
         />
       </div>
       <div class="nav-loading" v-if="loading">
-        <span class="spinner"></span> Loading channels...
+        <span class="spinner"></span>
+        <span>{{ t('loadingChannels') }}</span>
       </div>
-      <ul class="nav-list" v-else>
-        <li class="sub-nav" v-for="i in filteredTvs" :key="i.url + i.name">
-          <img v-if="i.meta && i.meta['tvg-logo']" :src="i.meta['tvg-logo']" class="tv-logo" loading="lazy" />
-          <a
-            v-if="i.isTv"
-            :class="{ active: i.url == active }"
-            :href="'#/?url=' + encodeURIComponent(i.url) + (i.caption ? '&caption=' + encodeURIComponent(i.caption) : '') + (isIptv ? '&iptv=1' : '')"
-            @click="setTitle(i.name)"
-          >{{ i.name }}</a>
-          <span v-else class="group-label">{{ i.name }}</span>
-        </li>
-      </ul>
+      <template v-else>
+        <div class="nav-channel-count" v-if="tvChannelCount > 0 && !search">
+          {{ t('channelCount', { count: tvChannelCount }) }}
+        </div>
+        <div class="nav-no-results" v-if="search && filteredTvs.length === 0">
+          {{ t('noResults') }}
+        </div>
+        <ul class="nav-list">
+          <li class="sub-nav" v-for="i in filteredTvs" :key="i.url + i.name">
+            <img
+              v-if="i.meta && i.meta['tvg-logo']"
+              :src="i.meta['tvg-logo']"
+              class="tv-logo"
+              loading="lazy"
+              alt=""
+            />
+            <a
+              v-if="i.isTv"
+              :class="{ active: i.url == active }"
+              :href="'#/?url=' + encodeURIComponent(i.url) + (i.caption ? '&caption=' + encodeURIComponent(i.caption) : '') + (isIptv ? '&iptv=1' : '')"
+              @click="setTitle(i.name)"
+            >{{ i.name }}</a>
+            <span v-else class="group-label">{{ i.name }}</span>
+          </li>
+        </ul>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
+import { useI18n } from "../i18n/index.js";
+
+const { t, toggleLocale } = useI18n();
 
 const props = defineProps(["tvs", "active", "isIptv", "loading"]);
 defineEmits(["switchMode"]);
 
 const isOpen = ref(false);
 const search = ref("");
+
+const tvChannelCount = computed(() => {
+  return props.tvs.filter((i) => i.isTv).length;
+});
 
 const filteredTvs = computed(() => {
   if (!search.value.trim()) return props.tvs;
@@ -67,7 +99,7 @@ const filteredTvs = computed(() => {
 });
 
 function setTitle(title) {
-  document.title = title + " | Web TV";
+  document.title = title + t("titleSuffix");
 }
 </script>
 
@@ -128,12 +160,43 @@ function setTitle(title) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 1rem 0.5rem 1.2rem;
+    padding: 0.9rem 0.8rem 0.5rem 1.2rem;
+    min-height: 2.4rem;
+
     .nav-title {
       font-size: 1.1rem;
       font-weight: 600;
       letter-spacing: 0.03em;
+      white-space: nowrap;
+      min-width: 0;
     }
+
+    .nav-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    .lang-toggle {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 0.22rem 0.55rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.2;
+      white-space: nowrap;
+      &:hover {
+        background: #fd6a30;
+        border-color: #fd6a30;
+      }
+    }
+
     .nav-close {
       background: none;
       border: none;
@@ -159,14 +222,18 @@ function setTitle(title) {
   .nav-tab {
     flex: 1;
     text-align: center;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.8rem;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     color: rgba(255, 255, 255, 0.5);
     text-decoration: none;
     border-bottom: 2px solid transparent;
     transition: all 0.2s;
+    white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
     &:hover {
       color: rgba(255, 255, 255, 0.8);
     }
@@ -198,6 +265,20 @@ function setTitle(title) {
     }
   }
 
+  .nav-channel-count {
+    padding: 0.2rem 1.2rem 0.3rem;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.03em;
+  }
+
+  .nav-no-results {
+    padding: 2rem 1.2rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+  }
+
   .nav-loading {
     display: flex;
     align-items: center;
@@ -215,6 +296,7 @@ function setTitle(title) {
     border-top-color: #fd6a30;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
   }
 
   @keyframes spin {
@@ -242,6 +324,7 @@ function setTitle(title) {
     line-height: 2.2rem;
     display: flex;
     align-items: center;
+    min-width: 0;
     &:hover {
       background: rgba(255, 255, 255, 0.05);
     }
@@ -250,12 +333,14 @@ function setTitle(title) {
       max-height: 1.6rem;
       margin-right: 0.8rem;
       border-radius: 3px;
+      flex-shrink: 0;
     }
     a {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 0.88rem;
+      min-width: 0;
     }
   }
 

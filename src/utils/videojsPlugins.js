@@ -38,10 +38,11 @@ export function translatePlugin(options = {}) {
   }
 }
 
-export function refreshTranslateBtn(player) {
+export function refreshTranslateBtn(player, label) {
+  const btnText = label || 'Translate';
   setTimeout(() => {
     player.getChild('ControlBar').getChild('SubsCapsButton').children()[1].addChild('textButton', {
-      text: '\u7FFB\u8BD1',
+      text: btnText,
       seleced: enableTranslate,
       handleClick: (e) => {
         enableTranslate = e.seleced;
