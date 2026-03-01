@@ -8,12 +8,12 @@
         <span class="nav-title">{{ t('appTitle') }}</span>
         <div class="nav-header-actions">
           <button
-            class="lang-toggle"
-            @click="toggleLocale"
-            :title="t('langSwitch')"
-            :aria-label="'Switch to ' + t('langSwitch')"
+            class="settings-btn"
+            @click="$emit('openSettings')"
+            :title="t('settings')"
+            :aria-label="t('settings')"
           >
-            {{ t('langSwitch') }}
+            ⚙️
           </button>
           <button class="nav-close" @click="isOpen = false" aria-label="Close menu">&times;</button>
         </div>
@@ -21,16 +21,22 @@
       <div class="nav-tabs">
         <a
           class="nav-tab"
-          :class="{ 'nav-tab-active': !isIptv }"
+          :class="{ 'nav-tab-active': mode === 'home' }"
           href="#/"
           @click="$emit('switchMode', 'home')"
         >{{ t('tabHome') }}</a>
         <a
           class="nav-tab"
-          :class="{ 'nav-tab-active': isIptv }"
-          href="#/?iptv=1"
+          :class="{ 'nav-tab-active': mode === 'iptv' }"
+          href="#/?mode=iptv"
           @click="$emit('switchMode', 'iptv')"
         >{{ t('tabIptv') }}</a>
+        <a
+          class="nav-tab"
+          :class="{ 'nav-tab-active': mode === 'radio' }"
+          href="#/?mode=radio"
+          @click="$emit('switchMode', 'radio')"
+        >{{ t('tabRadio') }}</a>
       </div>
       <div class="nav-search" v-if="props.tvs.length > 20 || search">
         <input
@@ -80,8 +86,8 @@ import { useI18n } from "../i18n/index.js";
 
 const { t, toggleLocale } = useI18n();
 
-const props = defineProps(["tvs", "active", "isIptv", "loading"]);
-defineEmits(["switchMode"]);
+const props = defineProps(["tvs", "active", "mode", "loading"]);
+defineEmits(["switchMode", "openSettings"]);
 
 const isOpen = ref(false);
 const search = ref("");
@@ -178,19 +184,21 @@ function setTitle(title) {
       flex-shrink: 0;
     }
 
-    .lang-toggle {
+    .settings-btn {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: #fff;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      padding: 0.22rem 0.55rem;
-      border-radius: 10px;
+      font-size: 0.9rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s;
-      line-height: 1.2;
-      white-space: nowrap;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
       &:hover {
         background: #fd6a30;
         border-color: #fd6a30;
@@ -222,10 +230,10 @@ function setTitle(title) {
   .nav-tab {
     flex: 1;
     text-align: center;
-    padding: 0.5rem 0.4rem;
-    font-size: 0.75rem;
+    padding: 0.4rem 0.3rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     color: rgba(255, 255, 255, 0.5);
     text-decoration: none;
     border-bottom: 2px solid transparent;

@@ -31,10 +31,18 @@ export function createI18n() {
     document.documentElement.setAttribute("lang", locale.value);
   }
 
+  function setLocale(lang) {
+    if (messages[lang]) {
+      locale.value = lang;
+      localStorage.setItem(STORAGE_KEY, lang);
+      document.documentElement.setAttribute("lang", lang);
+    }
+  }
+
   // Set initial lang attribute
   document.documentElement.setAttribute("lang", locale.value);
 
-  return { locale, t, toggleLocale, install(app) { app.provide(I18N_KEY, { locale, t, toggleLocale }); } };
+  return { locale, t, toggleLocale, setLocale, install(app) { app.provide(I18N_KEY, { locale, t, toggleLocale, setLocale }); } };
 }
 
 export function useI18n() {
