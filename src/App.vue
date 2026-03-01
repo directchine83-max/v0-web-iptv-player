@@ -86,12 +86,10 @@ function loadPlaylistForMode(mode) {
     playlistUrl = getPlaylistUrl(selectedCountry.value, "home");
   }
   
-  console.log("[v0] loadPlaylistForMode - Mode:", mode, "Country:", selectedCountry.value, "URL:", playlistUrl);
   loadPlaylist(playlistUrl, mode);
 }
 
 function onCountryChanged(country) {
-  console.log("[v0] Country changed to:", country);
   selectedCountry.value = country;
   // The watch() will automatically trigger when selectedCountry changes
   // No need to manually reload here - the watcher handles it
@@ -190,10 +188,8 @@ function selectFirstChannel() {
 watch(
   () => selectedCountry.value,
   (newCountry) => {
-    console.log("[v0] Watch triggered - Country:", newCountry, "Mode:", currentMode.value);
     // Automatically reload HOME playlist when country changes
     if (currentMode.value === "home") {
-      console.log("[v0] Reloading HOME playlist for country:", newCountry);
       loadPlaylistForMode("home");
     }
   }

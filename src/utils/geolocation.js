@@ -58,13 +58,13 @@ export function getCountryInfo(countryCode) {
  * @returns {string} Playlist URL
  */
 export function getPlaylistUrl(countryCode, type) {
-  const country = SUPPORTED_COUNTRIES[countryCode] || SUPPORTED_COUNTRIES[DEFAULT_COUNTRY];
-  const code = country.code;
+  const countryInfo = SUPPORTED_COUNTRIES[countryCode] || SUPPORTED_COUNTRIES[DEFAULT_COUNTRY];
+  const countryISOCode = countryInfo.code;
 
   const playlists = {
-    home: `https://iptv-org.github.io/iptv/countries/${code}.m3u`,
+    home: `https://iptv-org.github.io/iptv/countries/${countryISOCode}.m3u`,
     iptv: "https://iptv-org.github.io/iptv/index.m3u",
-    radio: `https://iptv-org.github.io/iptv/countries/${code}.m3u`, // Radio content filtered from country playlist
+    radio: `https://iptv-org.github.io/iptv/countries/${countryISOCode}.m3u`, // Radio content filtered from country playlist
   };
 
   return playlists[type] || playlists.home;
