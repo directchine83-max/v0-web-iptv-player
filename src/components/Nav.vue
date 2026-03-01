@@ -69,7 +69,7 @@
             <a
               v-if="i.isTv"
               :class="{ active: i.url == active }"
-              :href="'#/?url=' + encodeURIComponent(i.url) + (i.caption ? '&caption=' + encodeURIComponent(i.caption) : '') + (isIptv ? '&iptv=1' : '')"
+              :href="'#/?url=' + encodeURIComponent(i.url) + (i.caption ? '&caption=' + encodeURIComponent(i.caption) : '') + (mode ? '&mode=' + mode : '')"
               @click="setTitle(i.name)"
             >{{ i.name }}</a>
             <span v-else class="group-label">{{ i.name }}</span>

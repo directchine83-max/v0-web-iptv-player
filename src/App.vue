@@ -176,7 +176,7 @@ function filterRadios(channels) {
 }
 
 function selectFirstChannel() {
-  if (!url.value || isIptv.value) {
+  if (!url.value || currentMode.value === "iptv") {
     const firstTv = tvs.value.find((t) => t.isTv);
     if (firstTv) {
       url.value = firstTv.url;
