@@ -4,6 +4,7 @@
     :active="url"
     :mode="currentMode"
     :loading="loading"
+    :currentCountry="selectedCountry"
     @switchMode="switchMode"
     @openSettings="showSettings = true"
   />
@@ -85,15 +86,15 @@ function loadPlaylistForMode(mode) {
     playlistUrl = getPlaylistUrl(selectedCountry.value, "home");
   }
   
+  console.log("[v0] loadPlaylistForMode - Mode:", mode, "Country:", selectedCountry.value, "URL:", playlistUrl);
   loadPlaylist(playlistUrl, mode);
 }
 
 function onCountryChanged(country) {
+  console.log("[v0] Country changed to:", country);
   selectedCountry.value = country;
-  // Reload HOME playlist with new country if in HOME mode
-  if (currentMode.value === "home") {
-    loadPlaylistForMode("home");
-  }
+  // The watch() will automatically trigger when selectedCountry changes
+  // No need to manually reload here - the watcher handles it
 }
 
 async function loadPlaylist(playlistUrl, mode = "home") {
@@ -176,7 +177,7 @@ function filterRadios(channels) {
 }
 
 function selectFirstChannel() {
-  if (!url.value || isIptv.value) {
+  if (!url.value || currentMode.value === "iptv") {
     const firstTv = tvs.value.find((t) => t.isTv);
     if (firstTv) {
       url.value = firstTv.url;
@@ -184,6 +185,19 @@ function selectFirstChannel() {
     }
   }
 }
+
+// Watch for country changes and reload playlist in HOME mode
+watch(
+  () => selectedCountry.value,
+  (newCountry) => {
+    console.log("[v0] Watch triggered - Country:", newCountry, "Mode:", currentMode.value);
+    // Automatically reload HOME playlist when country changes
+    if (currentMode.value === "home") {
+      console.log("[v0] Reloading HOME playlist for country:", newCountry);
+      loadPlaylistForMode("home");
+    }
+  }
+);
 
 onMounted(() => {
   const params = new URLSearchParams(window.location.hash.replace("#/", ""));
